@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  react-nginx:
+    container_name: "react-nginx"
+    ports:
+      - "4000:80"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "react-nginx-server"

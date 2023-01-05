@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim
+FROM node:14-bullseye-slim AS builder
 
 WORKDIR /app
 
@@ -8,6 +8,11 @@ RUN ["yarn", "install"]
 COPY . .
 RUN ["yarn", "build"]
 
-EXPOSE 4000
 
-CMD yarn dev --port 4000 --host 0.0.0.0
+FROM nginx
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
